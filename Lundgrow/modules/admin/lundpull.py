@@ -17,7 +17,7 @@ async def git_pull_command(client, message):
 
     try:
         result = subprocess.run(
-            ["git", "pull", "https://@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github.com/sungjinw04/Landburjhat.git", "main"],
+            ["git", "pull", "https://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@github.com/sungjinw04/Landburjhat.git", "main"],
             capture_output=True, text=True, check=True
         )
         if "Already up to date" in result.stdout:
