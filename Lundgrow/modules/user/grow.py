@@ -1,12 +1,14 @@
 import random
 import time
 from datetime import datetime, timedelta
-from Lundgrow import user_collection, special_user_collection, Bot  
+from Lundgrow.database import user_collection, special_user_collection
+from Lundgrow import Bot
+from pyrogram import filters
 
 GROW_TIME_LIMIT = 12 * 60 * 60  
 
 def get_user_data(user_id):
-   
+    
     user = user_collection.find_one({"user_id": user_id})
     if not user:
         user = {"user_id": user_id, "dick_size": 0, "last_grow_time": None}
@@ -28,12 +30,12 @@ def update_dick_size(user_id, new_size):
 async def grow_dick(client, message):
     user_id = message.from_user.id
 
-  
+    
     user = get_user_data(user_id)
     dick_size = user["dick_size"]
     last_grow_time = user["last_grow_time"]
 
-   
+  
     if not is_special_user(user_id):
         if last_grow_time:
             
@@ -54,5 +56,8 @@ async def grow_dick(client, message):
     update_dick_size(user_id, new_dick_size)
 
     
-    await message.reply(f"Your dick has grown by {growth} cm and now it is {new_dick_size} cm long.\nNext attempt in 12h." if not is_special_user(user_id) else f"Your dick has grown by {growth} cm and now it is {new_dick_size} cm long.")
+    await message.reply_photo(
+        "https://files.catbox.moe/10guiy.jpg",
+        caption=f"Your dick has grown by {growth} cm and now it is {new_dick_size} cm long.\nNext attempt in 12h." if not is_special_user(user_id) else f"Your dick has grown by {growth} cm and now it is {new_dick_size} cm long."
+    )
 
