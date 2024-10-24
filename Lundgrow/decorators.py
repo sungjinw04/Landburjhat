@@ -1,13 +1,13 @@
 from functools import wraps
 from pyrogram.types import Message
-from Lundgrow.database import blacklist_chat, blacklist_user 
+from Lundgrow.database import blacklist_chats, blacklist_users
 
 def blacklist_chat(func):
     @wraps(func)
     async def wrapper(client, message: Message, *args, **kwargs):
         chat_id = message.chat.id
         
-        is_blacklisted = await blacklist_chat.find_one({"chat_id": chat_id})
+        is_blacklisted = await blacklist_chats.find_one({"chat_id": chat_id})
 
         if is_blacklisted:
             await message.reply_text("This chat is blacklisted and cannot use any commands.")
@@ -21,7 +21,7 @@ def blacklist_user(func):
     async def wrapper(client, message, *args, **kwargs):
         user_id = message.from_user.id
         # Check if the user is banned
-        banned_user = await blacklist_user.find_one({"user_id": user_id})
+        banned_user = await blacklist_users.find_one({"user_id": user_id})
         if banned_user:
             await message.reply("You are banned from using this bot.")
             return
