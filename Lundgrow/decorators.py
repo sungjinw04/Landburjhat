@@ -7,7 +7,7 @@ def blacklist_chat(func):
     async def wrapper(client, message: Message, *args, **kwargs):
         chat_id = message.chat.id
         
-        is_blacklisted = await blacklist_collection.find_one({"chat_id": chat_id})
+        is_blacklisted = await blacklist_chat.find_one({"chat_id": chat_id})
 
         if is_blacklisted:
             await message.reply_text("This chat is blacklisted and cannot use any commands.")
