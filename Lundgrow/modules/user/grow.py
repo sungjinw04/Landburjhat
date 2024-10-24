@@ -7,23 +7,23 @@ from pyrogram import filters
 
 GROW_TIME_LIMIT = 12 * 60 * 60  
 
-def get_user_data(user_id):
+async def get_user_data(user_id):
     
-    user = user_collection.find_one({"user_id": user_id})
+    user = await user_collection.find_one({"user_id": user_id})
     if not user:
         user = {"user_id": user_id, "dick_size": 0, "last_grow_time": None}
-        user_collection.insert_one(user)
+        await user_collection.insert_one(user)  
     return user
 
-def is_special_user(user_id):
+async def is_special_user(user_id):
     
-    return special_user_collection.find_one({"user_id": user_id}) is not None
+    return await special_user_collection.find_one({"user_id": user_id}) is not None  # Await here
 
-def update_dick_size(user_id, new_size):
+async def update_dick_size(user_id, new_size):
     
-    user_collection.update_one(
+    await user_collection.update_one(
         {"user_id": user_id},
-        {"$set": {"dick_size": new_size, "last_grow_time": datetime.utcnow()}}
+        {"$set": {"dick_size": new_size, "last_grow_time": datetime.utcnow()}}  # Await async DB call
     )
 
 @Bot.on_message(filters.command("grow") & filters.private)
@@ -31,12 +31,12 @@ async def grow_dick(client, message):
     user_id = message.from_user.id
 
     
-    user = get_user_data(user_id)
+    user = await get_user_data(user_id)  
     dick_size = user["dick_size"]
     last_grow_time = user["last_grow_time"]
 
   
-    if not is_special_user(user_id):
+    if not await is_special_user(user_id):  
         if last_grow_time:
             
             time_since_last_grow = (datetime.utcnow() - last_grow_time).total_seconds()
@@ -53,11 +53,10 @@ async def grow_dick(client, message):
     new_dick_size = dick_size + growth
 
     
-    update_dick_size(user_id, new_dick_size)
+    await update_dick_size(user_id, new_dick_size)
 
-    
+  
     await message.reply_photo(
         "https://files.catbox.moe/10guiy.jpg",
-        caption=f"Your dick has grown by {growth} cm and now it is {new_dick_size} cm long.\nNext attempt in 12h." if not is_special_user(user_id) else f"Your dick has grown by {growth} cm and now it is {new_dick_size} cm long."
+        caption=f"Your dick has grown by {growth} cm and now it is {new_dick_size} cm long.\nNext attempt in 12h." if not await is_special_user(user_id) else f"Your dick has grown by {growth} cm and now it is {new_dick_size} cm long."
     )
-
