@@ -1,7 +1,7 @@
 from pyrogram import filters, enums
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from Lundgrow import Bot
-from Lundgrow.database import blacklist_user
+from Lundgrow.database import blacklist_users
 from ...config import OWNER_ID, DEV_ID
 
 @Bot.on_message(filters.command("lundbang") & filters.reply)
@@ -16,13 +16,13 @@ async def bang_user(client, message):
         first_name = message.reply_to_message.from_user.first_name
 
         # Check if the user is already banned
-        existing = await blacklist_user.find_one({"user_id": user_id})
+        existing = await blacklist_users.find_one({"user_id": user_id})
         if existing:
             await message.reply(f"{first_name} is already banged.")
             return
 
         # Insert the user_id into the blacklist_user collection
-        await blacklist_user.insert_one({"user_id": user_id, "first_name": first_name})
+        await blacklist_users.insert_one({"user_id": user_id, "first_name": first_name})
 
         await message.reply(f"Successfully lund banged [{first_name}](tg://user?id={user_id})", parse_mode=enums.ParseMode.MARKDOWN)
 
@@ -42,13 +42,13 @@ async def unbang_user(client, message):
         first_name = message.reply_to_message.from_user.first_name
 
         # Check if the user is in the blacklist
-        existing = await blacklist_user.find_one({"user_id": user_id})
+        existing = await blacklist_users.find_one({"user_id": user_id})
         if not existing:
             await message.reply(f"{first_name} is not banged.")
             return
 
         # Remove the user from the blacklist
-        await blacklist_user.delete_one({"user_id": user_id})
+        await blacklist_users.delete_one({"user_id": user_id})
 
         await message.reply(f"Successfully un-lundbanged [{first_name}](tg://user?id={user_id})", parse_mode=enums.ParseMode.MARKDOWN)
 
@@ -63,7 +63,7 @@ async def lund_bang_list(client, message):
 
     try:
         # Fetch all banned users from the blacklist_user collection
-        banned_users = await blacklist_user.find({}).to_list(length=100)
+        banned_users = await blacklist_users.find({}).to_list(length=100)
 
         if not banned_users:
             await message.reply("No users are lund banged.")
