@@ -1,7 +1,7 @@
 from pyrogram import filters, enums
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from Lundgrow import Bot
-from Lundgrow.database import blacklist_chat
+from Lundgrow.database import blacklist_chats
 from ...config import OWNER_ID, DEV_ID
 
 @Bot.on_message(filters.command("blchat") & filters.private)
@@ -19,13 +19,13 @@ async def blacklist_chat(client, message):
         chat_title = chat.title or chat.username or str(chat_id)
 
         # Check if the chat is already blacklisted
-        existing = await blacklist_chat.find_one({"chat_id": chat_id})
+        existing = await blacklist_chats.find_one({"chat_id": chat_id})
         if existing:
             await message.reply("This chat is already blacklisted.")
             return
 
         # Insert the chat_id into the blacklist_collection
-        await blacklist_chat.insert_one({"chat_id": chat_id})
+        await blacklist_chats.insert_one({"chat_id": chat_id})
 
         # Send a success message
         chat_info = f'[{chat_title}](tg://user?id={chat_id})' if chat_title != str(chat_id) else f"`{chat_id}`"
@@ -44,7 +44,7 @@ async def blacklist_chat_list(client, message):
 
     try:
         # Fetch all blacklisted chats from the database
-        blacklisted_chats = await blacklist_chat.find({}).to_list(length=100)
+        blacklisted_chats = await blacklist_chats.find({}).to_list(length=100)
         
         if not blacklisted_chats:
             await message.reply("No chats are blacklisted.")
