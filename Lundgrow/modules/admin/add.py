@@ -11,13 +11,14 @@ async def add_special_user(client, message):
     target_user_id = message.reply_to_message.from_user.id
     target_first_name = message.reply_to_message.from_user.first_name
 
-    
+    # Correct async await for checking user existence in the collection
     existing_user = await special_user_collection.find_one({"user_id": target_user_id})
     
     if existing_user:
         await message.reply(f"{target_first_name} is already in the special list.")
         return
 
+    # Inserting the user into the collection
     await special_user_collection.insert_one({"user_id": target_user_id, "first_name": target_first_name})
 
     await message.reply(f"Successfully added [{target_first_name}](tg://user?id={target_user_id}) to the special list.", parse_mode=enums.ParseMode.MARKDOWN)
@@ -31,12 +32,14 @@ async def remove_special_user(client, message):
     target_user_id = message.reply_to_message.from_user.id
     target_first_name = message.reply_to_message.from_user.first_name
 
+    # Properly check if the user is in the special list
     existing_user = await special_user_collection.find_one({"user_id": target_user_id})
     
     if not existing_user:
         await message.reply(f"{target_first_name} is not in the special list.")
         return
 
+    # Removing the user from the collection
     await special_user_collection.delete_one({"user_id": target_user_id})
 
     await message.reply(f"Successfully removed [{target_first_name}](tg://user?id={target_user_id}) from the special list.", parse_mode=enums.ParseMode.MARKDOWN)
@@ -47,10 +50,11 @@ async def list_special_users(client, message):
     if int(message.from_user.id) not in DEV_ID and int(message.from_user.id) not in OWNER_ID:
         return
 
-    special_users = special_user_collection.find()
+    # Fetch all special users
+    special_users_cursor = special_user_collection.find()
 
     user_links = []
-    async for user in special_users:
+    async for user in special_users_cursor:
         first_name = user.get("first_name", "Unknown")
         user_id = user["user_id"]
         user_link = f"[{first_name}](tg://user?id={user_id})"
