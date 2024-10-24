@@ -24,9 +24,12 @@ async def chat_sins_leaderboard(client, message):
     leaderboard_text = "Top 10 dick sizes in this chat:\n\n"
     for index, user in enumerate(top_users, start=1):
         user_id = user["user_id"]
-        first_name = user.get("first_name", "Unknown")
-        dick_size = user["dick_size"]
-        leaderboard_text += f"{index}) [{first_name}](tg://user?id={user_id}) - {dick_size} cm\n"
+        first_name = user.get("first_name", None)
+        if not first_name:
+            first_name = "Unknown"  # Handle missing first name
+
+        # Format the user as a clickable link
+        leaderboard_text += f"{index}) [{first_name}](tg://user?id={user_id}) - {user['dick_size']} cm\n"
 
     await message.reply(leaderboard_text, parse_mode=enums.ParseMode.MARKDOWN)
 
@@ -53,8 +56,11 @@ async def global_sins_leaderboard(client, message):
     leaderboard_text = "Top 10 global dick sizes:\n\n"
     for index, user in enumerate(top_users, start=1):
         user_id = user["_id"]
-        first_name = user.get("first_name", "Unknown")
-        total_dick_size = user["total_dick_size"]
-        leaderboard_text += f"{index}) [{first_name}](tg://user?id={user_id}) - {total_dick_size} cm\n"
+        first_name = user.get("first_name", None)
+        if not first_name:
+            first_name = "Unknown"  # Handle missing first name
+
+        # Format the user as a clickable link
+        leaderboard_text += f"{index}) [{first_name}](tg://user?id={user_id}) - {user['total_dick_size']} cm\n"
 
     await message.reply(leaderboard_text, parse_mode=enums.ParseMode.MARKDOWN)
