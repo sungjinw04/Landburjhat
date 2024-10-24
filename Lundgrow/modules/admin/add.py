@@ -2,9 +2,9 @@ from pyrogram import filters, enums
 from Lundgrow import OWNER_ID, DEV_ID, Bot
 from Lundgrow.database import special_user_collection
 
-@Bot.on_message(filters.command("add") & filters.user([OWNER_ID, DEV_ID]) & filters.reply)
+@Bot.on_message(filters.command("add") & filters.reply)
 async def add_special_user(client, message):
-    # Get the replied-to user's ID
+    if int(message.from_user.id) not in DEV_ID  and int(message.from_user.id) not in OWNER_ID:
     target_user_id = message.reply_to_message.from_user.id
     target_first_name = message.reply_to_message.from_user.first_name
 
