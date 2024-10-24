@@ -8,14 +8,17 @@ from Lundgrow.config import SUPPORT, SUPPORT_CHANNEL, BOT_USERNAME
 @Bot.on_message(filters.command("start") & filters.private)
 async def start_private(client, message):
     user_id = message.from_user.id
-    user_name = message.from_user.first_name
+    user_first_name = message.from_user.first_name
 
     user_data = await user_collection.find_one({"id": user_id})
     if not user_data:
-        await user_collection.insert_one({"id": user_id, "name": user_name})
+        await user_collection.insert_one({"id": user_id, "details": {"first_name": user_first_name}})
     else:
-        if user_data.get("name") != user_name:
-            await user_collection.update_one({"id": user_id}, {"$set": {"name": user_name}})
+        if user_data.get("details", {}).get("first_name") != user_first_name:
+            await user_collection.update_one(
+                {"id": user_id}, 
+                {"$set": {"details.first_name": user_first_name}}
+            )
 
     symbols = ["🌟", "❄", "🌈"]
     sent_message = await message.reply_text(symbols[0])
@@ -53,15 +56,18 @@ async def start_private(client, message):
 @Bot.on_message(filters.command("start") & filters.group)
 async def start_group(client, message):
     user_id = message.from_user.id
-    user_name = message.from_user.first_name
+    user_first_name = message.from_user.first_name
     chat_id = message.chat.id
 
     user_data = await user_collection.find_one({"id": user_id})
     if not user_data:
-        await user_collection.insert_one({"id": user_id, "name": user_name})
+        await user_collection.insert_one({"id": user_id, "details": {"first_name": user_first_name}})
     else:
-        if user_data.get("name") != user_name:
-            await user_collection.update_one({"id": user_id}, {"$set": {"name": user_name}})
+        if user_data.get("details", {}).get("first_name") != user_first_name:
+            await user_collection.update_one(
+                {"id": user_id}, 
+                {"$set": {"details.first_name": user_first_name}}
+            )
 
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("Contact me in PM", url=f'http://t.me/{BOT_USERNAME}?start=help')]
