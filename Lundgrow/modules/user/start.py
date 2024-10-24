@@ -4,8 +4,11 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from Lundgrow import Bot
 from Lundgrow.database import user_collection
 from Lundgrow.config import SUPPORT, SUPPORT_CHANNEL, BOT_USERNAME
+from Lundgrow.decorators import blacklist_chat, blacklist_user
 
 @Bot.on_message(filters.command("start") & filters.private)
+@blacklist_chat
+@blacklist_user
 async def start_private(client, message):
     user_id = message.from_user.id
     user_first_name = message.from_user.first_name
