@@ -36,7 +36,7 @@ async def update_dick_size(user_id, chat_id, new_size):
     )
 
 @Bot.on_message(filters.command("grow"))
-@blacklist_check
+@blacklist_chat
 @blacklist_user
 async def grow_dick(client, message):
     user_id = message.from_user.id
