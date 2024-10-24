@@ -1,5 +1,5 @@
-OWNER_ID = 7392339658
-DEV_ID = 5332414680
+OWNER_ID = [7392339658]
+DEV_ID = [5332414680]
 TOKEN = "8149074708:AAHWW40GU1Yi93ZGT1r-o0W7Fadb9npzmT4"
 MONGO_URI = "mongodb+srv://Sungjinwoo4:sung4224@cluster0.ayaos.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 SUPPORT = "eldian_empire"
