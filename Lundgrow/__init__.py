@@ -1,10 +1,11 @@
 import logging
 from pyrogram import Client, idle
 from motor.motor_asyncio import AsyncIOMotorClient
-from .config import OWNER_ID, TOKEN, MONGO_URI, SUPPORT, SUPPORT_CHANNEL, API_ID, API_HASH, JOINLOGS, LEAVELOGS, BOT_USERNAME
+from .config import OWNER_ID, DEV_ID, TOKEN, MONGO_URI, SUPPORT, SUPPORT_CHANNEL, API_ID, API_HASH, JOINLOGS, LEAVELOGS, BOT_USERNAME
 
 class Config:
     OWNER_ID = OWNER_ID
+    DEV_ID = DEV_ID
     TOKEN = TOKEN
     MONGO_URI = MONGO_URI
     SUPPORT = SUPPORT
