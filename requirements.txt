@@ -1,0 +1,10 @@
+motor
+pillow
+requests
+pymongo 
+pyrogram
+tgcrypto 
+python-dotenv
+cachetools
+asyncio
+aiocron
