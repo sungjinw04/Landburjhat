@@ -26,7 +26,7 @@ async def update_dick_size(user_id, new_size):
         {"$set": {"dick_size": new_size, "last_grow_time": datetime.utcnow()}}  # Await async DB call
     )
 
-@Bot.on_message(filters.command("grow") & filters.private)
+@Bot.on_message(filters.command("grow"))
 async def grow_dick(client, message):
     user_id = message.from_user.id
 
