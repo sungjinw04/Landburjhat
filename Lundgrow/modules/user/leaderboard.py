@@ -2,8 +2,11 @@ import asyncio
 from pyrogram import filters, enums
 from Lundgrow import Bot
 from Lundgrow.database import user_collection
+from Lundgrow.decorators import blacklist_chat, blacklist_user
 
 @Bot.on_message(filters.command("chatsins"))
+@blacklist_chat
+@blacklist_user
 async def chat_sins_leaderboard(client, message):
     chat_id = message.chat.id
 
@@ -38,6 +41,8 @@ async def chat_sins_leaderboard(client, message):
     await message.reply(leaderboard_text, parse_mode=enums.ParseMode.MARKDOWN)
 
 @Bot.on_message(filters.command("globalsins"))
+@blacklist_chat
+@blacklist_user
 async def global_sins_leaderboard(client, message):
     fetching_message = await message.reply("Fetching top lund globally...")
     await asyncio.sleep(2)
