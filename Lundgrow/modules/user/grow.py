@@ -2,7 +2,7 @@ import random
 from datetime import datetime, timedelta
 from Lundgrow.database import user_collection, special_user_collection
 from Lundgrow import Bot
-from Lundgrow.decorators import blacklist_check
+from Lundgrow.decorators import blacklist_chat, blacklist_user
 from pyrogram import filters
 import time
 
@@ -37,6 +37,7 @@ async def update_dick_size(user_id, chat_id, new_size):
 
 @Bot.on_message(filters.command("grow"))
 @blacklist_check
+@blacklist_user
 async def grow_dick(client, message):
     user_id = message.from_user.id
     chat_id = message.chat.id  # Track by chat ID
