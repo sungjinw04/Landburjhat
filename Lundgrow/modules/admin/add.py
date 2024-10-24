@@ -1,5 +1,6 @@
 from pyrogram import filters, enums
-from Lundgrow import OWNER_ID, DEV_ID, Bot
+from ...config import OWNER_ID, DEV_ID
+from Lundgrow import Bot
 from Lundgrow.database import special_user_collection
 
 @Bot.on_message(filters.command("add") & filters.reply)
