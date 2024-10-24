@@ -4,7 +4,7 @@ from .modules import *  # Import all handlers
 from pyrogram import idle
 
 # Define the BOTLOG chat ID where you want to send the log
-from Lundgrow import BOTLOG
+from Lundgrow import BOTLOGS
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -24,7 +24,7 @@ def log_imported_modules():
 
 async def send_startup_message():
     try:
-        await Bot.send_message(BOTLOG, "Lund Grow Bot has started successfully!")
+        await Bot.send_message(BOTLOGS, "Lund Grow Bot has started successfully!")
         logger.info("Startup message sent to BOTLOG.")
     except Exception as e:
         logger.error(f"Failed to send startup message: {e}")
