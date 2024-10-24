@@ -6,7 +6,7 @@ from time import sleep
 import asyncio
 
 from pyrogram import filters
-from Lundgrow import Bot
+from Lundgrow import Bot as app
 from ...config import DEV_ID, OWNER_ID
 
 @app.on_message(filters.command("lundpull"))
