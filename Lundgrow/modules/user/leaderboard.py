@@ -24,7 +24,13 @@ async def chat_sins_leaderboard(client, message):
     leaderboard_text = "Top 10 dick sizes in this chat:\n\n"
     for index, user in enumerate(top_users, start=1):
         user_id = user["user_id"]
-        first_name = user.get("details", {}).get("first_name", "Unknown")  # Handle missing first_name
+
+        # Fetch first name from Telegram using user_id
+        try:
+            user_info = await client.get_users(user_id)
+            first_name = user_info.first_name
+        except:
+            first_name = "Unknown"
 
         # Format the user as a clickable link
         leaderboard_text += f"{index}) [{first_name}](tg://user?id={user_id}) - {user['dick_size']} cm\n"
@@ -40,8 +46,7 @@ async def global_sins_leaderboard(client, message):
     top_users = await user_collection.aggregate([
         {"$group": {
             "_id": "$user_id",
-            "total_dick_size": {"$sum": "$dick_size"},
-            "first_name": {"$first": "$details.first_name"}
+            "total_dick_size": {"$sum": "$dick_size"}
         }},
         {"$sort": {"total_dick_size": -1}},
         {"$limit": 10}
@@ -54,7 +59,13 @@ async def global_sins_leaderboard(client, message):
     leaderboard_text = "Top 10 global dick sizes:\n\n"
     for index, user in enumerate(top_users, start=1):
         user_id = user["_id"]
-        first_name = user.get("first_name", "Unknown")  # Handle missing first_name
+
+        # Fetch first name from Telegram using user_id
+        try:
+            user_info = await client.get_users(user_id)
+            first_name = user_info.first_name
+        except:
+            first_name = "Unknown"
 
         # Format the user as a clickable link
         leaderboard_text += f"{index}) [{first_name}](tg://user?id={user_id}) - {user['total_dick_size']} cm\n"
