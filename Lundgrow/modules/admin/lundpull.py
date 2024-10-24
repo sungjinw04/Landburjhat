@@ -7,11 +7,11 @@ import asyncio
 
 from pyrogram import filters
 from Looter import Bot as app
-from ...config import DEV_ID
+from ...config import DEV_ID, OWNER_ID
 
 @app.on_message(filters.command("lundpull"))
 async def git_pull_command(client, message):
-    if int(message.from_user.id) not in DEV_ID:
+    if int(message.from_user.id) not in DEV_ID  and int(message.from_user.id) not in OWNER_ID:
         await message.reply("You are not authorized to use this command.")
         return
 
